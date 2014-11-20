@@ -16,3 +16,18 @@ http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" version="2.5">
 		<welcome-file>index.html</welcome-file>
 	</welcome-file-list>
 </web-app>
+
+	<servlat>
+	<servlet-name>StockDetailsServlet</servlet-name>
+	<servlet-class>com.mta.javacourse.Stock </servlet-class>
+	</servlet>
+	<servlet-mapping>
+	<servlet-name>StockDetailsServlet</servlet-name>
+	<url-pattern>/my_new_servlat</url-pattern>
+	</servlet-mapping>
+	
+	
+	
+	
+	
+	

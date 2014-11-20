@@ -1,12 +1,13 @@
 package com.mta.javacourse;
 import java.io.IOException;
+
 import javax.servlet.http.*;
 
 @SuppressWarnings("serial")
 public class Ronny1Servlet extends HttpServlet {
 	public void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
 		resp.setContentType("text/html");
-		int Radius=50,num1=0;
+		int Radius=50;
 		double Area,angleB=30,Hypotenuse=50,Opposite=0,Pow=0;
 		Area= Math.pow(Radius, 2)*Math.PI;
 		String line1 =new String("calculation 1:Area of circle with radius is:"+Area+"square-cm.");
