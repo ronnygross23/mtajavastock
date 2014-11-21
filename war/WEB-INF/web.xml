@@ -12,12 +12,7 @@ http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" version="2.5">
 		<servlet-name>Ronny1</servlet-name>
 		<url-pattern>/ronny1</url-pattern>
 	</servlet-mapping>
-	<welcome-file-list>
-		<welcome-file>index.html</welcome-file>
-	</welcome-file-list>
-</web-app>
-
-	<servlat>
+	<servlet>
 	<servlet-name>StockDetailsServlet</servlet-name>
 	<servlet-class>com.mta.javacourse.Stock </servlet-class>
 	</servlet>
@@ -25,7 +20,13 @@ http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" version="2.5">
 	<servlet-name>StockDetailsServlet</servlet-name>
 	<url-pattern>/my_new_servlat</url-pattern>
 	</servlet-mapping>
+	<welcome-file-list>
+		<welcome-file>index.html</welcome-file>
+	</welcome-file-list>
+</web-app>
+
 	
+
 	
 	
 	
