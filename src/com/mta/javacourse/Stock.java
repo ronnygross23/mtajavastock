@@ -6,7 +6,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 public class Stock  extends HttpServlet {
-	
 	private String sympol;
 
 	public String getSympol() {
@@ -53,7 +52,12 @@ public class Stock  extends HttpServlet {
 		return stockHtmlDetailsString;
 	}
 
-	
+	public Stock(){
+		sympol="Unknown";
+		Ask=0;
+		Bid=0;
+		date=null;
+	}
 	
 
 	
