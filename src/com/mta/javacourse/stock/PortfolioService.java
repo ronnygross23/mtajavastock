@@ -1,6 +1,10 @@
 package com.mta.javacourse.stock;
 
 import java.util.Date;
+/**
+ * this class add value to the stock
+ * @author Ronny
+ */
 import com.mta.javacourse.Stock;
 import com.mta.javacourse.model.Portfolio;
 import com.mta.javacourse.Stockdetails;
