@@ -29,15 +29,6 @@ public Portfolio(Portfolio Portfolio2)
 		this.stocks[i]=Portfolio2.getStocks()[i];
 	}
 }
-public String getTitle() {
-	return title;
-}
-
-public void setTitle(String title) {
-	this.title = title;
-}
-
-
 /**
  * A method that adds stock in stock array
  * @param stock
@@ -58,8 +49,8 @@ public Stock[] getStocks(){
  * a method that return the string
  * @return string with all the stock in the array.
  */
-public String getHtmlString(){
-		String getHtmlString ="<h1> Stock Portfolio </h1>" ;
+public String getHtmlString(String getHtmlString){
+		//String getHtmlString ="<h1> Stock Portfolio </h1>" ;
 		for (i=0;i<portfolioSize;i++)
 		{
 	 getHtmlString += stocks[i].getHtmlDescription() + "<br>";
@@ -67,6 +58,10 @@ public String getHtmlString(){
 		
 	return getHtmlString;
 	}
+public void changetitle()
+{
+	String getHtmlString="<h1>Portfolio#2</h1> ";
+}
 /**
  * The class contains data on regarding the advisability of investing.
  * @author Ronny

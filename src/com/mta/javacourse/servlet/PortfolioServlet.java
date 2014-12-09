@@ -22,11 +22,14 @@ public class PortfolioServlet extends HttpServlet {
 		Portfolio portfolio = portfolioService.getPortfolio();  
 		Stock[] stocks = portfolio.getStocks();
 		Portfolio portfolio2=portfolioService.getPortfolio();
-		
+		String getHtmlString="<h1> Stock Portfolio </h1>";
+		String getHtmlString2="<h1> Portfolio#2 </h1>";
 
 
-			resp.getWriter().println(portfolio.getHtmlString());
-			resp.getWriter().println(portfolio2.getHtmlString());
+			resp.getWriter().println(portfolio.getHtmlString(getHtmlString));
+			resp.getWriter().println(portfolio2.getHtmlString(getHtmlString));
+			resp.getWriter().println(portfolio.getHtmlString(getHtmlString));
+			resp.getWriter().println(portfolio2.getHtmlString(getHtmlString2));
 		}
 	}
 
