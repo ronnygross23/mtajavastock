@@ -61,6 +61,11 @@ public String getHtmlString(String getHtmlString){
 		
 	return getHtmlString;
 	}
+/**
+ * 
+ * a method that "remove" stock3
+ * @return string without stock3
+ */
 public String getHtmlString2(String getHtmlString){
 	
 	for (i=1;i<portfolioSize;i++)

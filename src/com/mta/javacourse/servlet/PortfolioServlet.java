@@ -26,10 +26,11 @@ public class PortfolioServlet extends HttpServlet {
 		String getHtmlString2="<h1>Portfolio</h1>"+"<h2> Portfolio#2 </h2>";
 			resp.getWriter().println(portfolio.getHtmlString(getHtmlString));
 			resp.getWriter().println(portfolio2.getHtmlString(getHtmlString2));
+			//remove stock1 from portfolio1
 			resp.getWriter().println(portfolio.getHtmlString2(getHtmlString));
 			resp.getWriter().println(portfolio2.getHtmlString2(getHtmlString2));	
-		float bid1=(float) 55.55;
-		portfolio2.getStocks()[1].setBid(bid1);
+		float bid1=(float) 55.55;//change the value of bid
+		portfolio2.getStocks()[2].setBid(bid1);
 		resp.getWriter().println(portfolio.getHtmlString2(getHtmlString));
 		resp.getWriter().println(portfolio2.getHtmlString2(getHtmlString2));
 		
