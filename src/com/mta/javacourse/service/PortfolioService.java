@@ -10,8 +10,7 @@ import com.mta.javacourse.model.Portfolio;
 import com.mta.javacourse.model.Stock;
 public class PortfolioService {
 	public Portfolio getPortfolio(){
-		
-		Portfolio myPortfolio=new Portfolio();
+		Portfolio portfolio1=new Portfolio();
 		
 		Stock Stock1 = new Stock();
 		Stock Stock2 = new Stock();
@@ -26,21 +25,23 @@ public class PortfolioService {
 		Stock1.setAsk((float) 12.4);
 		Stock1.setBid((float) 13.1);
 		Stock1.setDate(date);
-		myPortfolio.addStock(Stock1);
+		portfolio1.addStock(Stock1);
 		
 		Stock2.setSymbol("AAL");
 		Stock2.setAsk((float) 5.5);
 		Stock2.setBid((float) 5.78);
 		Stock2.setDate(date);
-		myPortfolio.addStock(Stock2);
+		portfolio1.addStock(Stock2);
 		
+			
 		Stock3.setSymbol("CAAS");
 		Stock3.setAsk((float) 31.5);
 		Stock3.setBid((float) 31.2);
 		Stock3.setDate(date);
-		myPortfolio.addStock(Stock3);
+		portfolio1.addStock(Stock3);
+			
+		return portfolio1;
 		
-		return myPortfolio;
 	}
 	
 	

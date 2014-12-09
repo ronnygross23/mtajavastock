@@ -28,7 +28,10 @@ public Portfolio(Portfolio Portfolio2)
 	{
 		this.stocks[i]=Portfolio2.getStocks()[i];
 	}
+	
+	
 }
+
 /**
  * A method that adds stock in stock array
  * @param stock
@@ -50,7 +53,7 @@ public Stock[] getStocks(){
  * @return string with all the stock in the array.
  */
 public String getHtmlString(String getHtmlString){
-		//String getHtmlString ="<h1> Stock Portfolio </h1>" ;
+	
 		for (i=0;i<portfolioSize;i++)
 		{
 	 getHtmlString += stocks[i].getHtmlDescription() + "<br>";
@@ -58,9 +61,14 @@ public String getHtmlString(String getHtmlString){
 		
 	return getHtmlString;
 	}
-public void changetitle()
-{
-	String getHtmlString="<h1>Portfolio#2</h1> ";
+public String getHtmlString2(String getHtmlString){
+	
+	for (i=1;i<portfolioSize;i++)
+	{
+ getHtmlString += stocks[i].getHtmlDescription() + "<br>";
+	}
+	
+return getHtmlString;
 }
 /**
  * The class contains data on regarding the advisability of investing.
