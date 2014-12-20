@@ -1,16 +1,12 @@
 package com.mta.javacourse.service;
 
 import java.util.Date;
-/**
- * this class add value to the stock
- * @author Ronny
- */
-
 import com.mta.javacourse.model.Portfolio;
 import com.mta.javacourse.model.Stock;
 public class PortfolioService {
+	@SuppressWarnings("deprecation")
 	public Portfolio getPortfolio(){
-		Portfolio portfolio1=new Portfolio();
+		Portfolio myPortfolio=new Portfolio();
 		
 		Stock Stock1 = new Stock();
 		Stock Stock2 = new Stock();
@@ -18,29 +14,39 @@ public class PortfolioService {
 		
 		Date date = new java.util.Date();
 		date.setDate(15);
-		date.setMonth(11);
+		date.setMonth(0);
 		date.setYear(2014);
 		
 		Stock1.setSymbol("PIH");
-		Stock1.setAsk((float) 12.4);
-		Stock1.setBid((float) 13.1);
+		Stock1.setAsk((float) 10);
+		Stock1.setBid((float) 8.5);
 		Stock1.setDate(date);
-		portfolio1.addStock(Stock1);
+		myPortfolio.addStock(Stock1, 20);
 		
 		Stock2.setSymbol("AAL");
-		Stock2.setAsk((float) 5.5);
-		Stock2.setBid((float) 5.78);
+		Stock2.setAsk((float) 30);
+		Stock2.setBid((float) 25.5);
 		Stock2.setDate(date);
-		portfolio1.addStock(Stock2);
+		myPortfolio.addStock(Stock2, 30);
 		
 			
 		Stock3.setSymbol("CAAS");
-		Stock3.setAsk((float) 31.5);
-		Stock3.setBid((float) 31.2);
+		Stock3.setAsk((float) 20);
+		Stock3.setBid((float)15.5);
 		Stock3.setDate(date);
-		portfolio1.addStock(Stock3);
+		myPortfolio.addStock(Stock3, 40);
+		
+		myPortfolio.setTitle("Exerisce 7 portfolio");
+		myPortfolio.setBalance(10000);
+		myPortfolio.buyStock("PIH", 20);
+		myPortfolio.buyStock("AAL", 30);
+		myPortfolio.buyStock("CAAS", 20);
+		myPortfolio.sellStock("AAL", -1);
+		myPortfolio.removeStock("CAAS");
+		
+		
 			
-		return portfolio1;
+		return myPortfolio;
 		
 	}
 	

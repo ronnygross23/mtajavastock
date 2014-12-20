@@ -8,17 +8,42 @@ import  java.util.*;
  *@since 4.12.14
  */
 public class Portfolio {
-	
+
+private static enum ALGO_RECOMMENDATION{DO_NOTHING,BUY,SELL};
 private final static int MAX_PORTFILO_SIZE=5;
 private String title;
 private Stock[] stocks;
 private StockStatus[] stockStatus;
 private int portfolioSize;
 public int i=0;
+private float balance;
+
+public String getTitle() {
+	return title;
+}
+
+public void setTitle(String title) {
+	this.title = title;
+}
+
+public float getBalance() {
+	return balance;
+}
+
+public void setBalance(float balance) {
+	this.balance = balance;
+}
+
+public void updateBalance(float amount)
+{
+	this.balance=balance+amount ;
+}
+
 public Portfolio()
 {
 	stocks= new Stock[MAX_PORTFILO_SIZE];
 	stockStatus=new StockStatus[MAX_PORTFILO_SIZE];
+	balance=0;
 }
 
 public Portfolio(Portfolio Portfolio2)
@@ -28,17 +53,23 @@ public Portfolio(Portfolio Portfolio2)
 	{
 		this.stocks[i]=Portfolio2.getStocks()[i];
 	}
-	
-	
 }
 
 /**
  * A method that adds stock in stock array
  * @param stock
  */
-public void addStock(Stock stock){
-	stocks[portfolioSize]=stock;
-	portfolioSize++;
+public void addStock(Stock stock ,int quantity){
+	if(portfolioSize<MAX_PORTFILO_SIZE)
+	{
+		stocks[portfolioSize]=stock;
+		stockStatus[portfolioSize]=new StockStatus(stock.getSymbol(),stock.getBid(),stock.getAsk(),stock.getDate(),ALGO_RECOMMENDATION.DO_NOTHING,quantity);
+		portfolioSize++;
+	}
+	else
+	{
+		System.out.println("can't add new stock, portfolio can have only" +MAX_PORTFILO_SIZE +"stocks");
+	}
 }
 /**
  * A method that return the stock array
@@ -52,44 +83,133 @@ public Stock[] getStocks(){
  * a method that return the string
  * @return string with all the stock in the array.
  */
-public String getHtmlString(String getHtmlString){
+public String getHtmlString(){
 	
+	String getHtmlString="<br><h1>"+this.getTitle()+"</h1></br>";
+	getHtmlString+="<br>"+"Total Portfolio Value:"+" "+this.getTotalValue()+"$"+"</br>"+"<br>"+"Total Stocks value:"+" "+this.getStocksValue()+"$"+"</br>"+"<br>"+"Balance:"+" "+this.getBalance()+"$"+"</br>";
+	getHtmlString+="<h3>"+"Stocks:"+"</h3>";
 		for (i=0;i<portfolioSize;i++)
 		{
-	 getHtmlString += stocks[i].getHtmlDescription() + "<br>";
+			getHtmlString += stocks[i].getHtmlDescription() + "<br>";
 		}
 		
 	return getHtmlString;
 	}
-/**
- * 
- * a method that "remove" stock3
- * @return string without stock3
- */
-public String removeStock(String getHtmlString){
-	
-	for (i=1;i<portfolioSize;i++)
+public boolean removeStock(String symbol)
+{
+	for (int i=0;i<portfolioSize;i++)
 	{
- getHtmlString += stocks[i].getHtmlDescription() + "<br>";
+		if(this.stocks[i].getSymbol()==symbol)
+		{
+			this.stocks[i]=this.stocks[portfolioSize-1];
+			this.stockStatus[i]=this.stockStatus[portfolioSize-1];
+			this.stocks[portfolioSize-1]=null;
+			this.stockStatus[portfolioSize-1]=null;
+			portfolioSize--;
+			return true;
+		}
 	}
-	
-return getHtmlString;
+	System.out.println("There is no stock");
+	return false;
 }
+
+public boolean sellStock (String symbol, int quantity)
+{
+	for(int i=0;i<portfolioSize;i++)
+	{
+		if(this.stocks[i].getSymbol()==symbol&&quantity==-1)
+		{
+			this.updateBalance(this.stockStatus[i].stockQuantity*this.stockStatus[i].getCurrnetBid());
+			this.stockStatus[i].setRecommendion(ALGO_RECOMMENDATION.SELL);
+			this.stockStatus[i].setStockQuantity(0);
+			return true;
+		}
+		else if(this.stocks[i].getSymbol()==symbol&&this.stockStatus[i].stockQuantity>quantity)
+		{
+			
+			this.updateBalance(this.stockStatus[i].stockQuantity*this.stockStatus[i].getCurrnetBid());
+			this.stockStatus[i].setRecommendion(ALGO_RECOMMENDATION.SELL);
+			this.stockStatus[i].stockQuantity=this.stockStatus[i].stockQuantity-quantity;
+			return true;
+				
+		}
+		else if (this.stocks[i].getSymbol()==symbol&&this.stockStatus[i].stockQuantity<quantity)
+		{
+			System.out.println("Not enough stock to sell");
+			return false;
+			
+		}
+		
+		System.out.println("There is no stock");
+		return false;
+	}
+	return false;
+}
+
+public boolean buyStock (String symbol, int quantity)
+{
+	
+	for (int i=0;i<portfolioSize;i++)
+	{
+		if(this.stocks[i].getSymbol()==symbol)
+		{
+			if (quantity==-1)
+			{
+				this.stockStatus[i].stockQuantity=(int)(this.balance/this.stockStatus[i].currnetAsk);
+				this.stockStatus[i].setRecommendion(ALGO_RECOMMENDATION.BUY);
+				this.updateBalance(0);
+				return true;
+			}
+			if(this.balance>=this.stockStatus[i].getCurrnetAsk()*quantity)
+			{
+				this.stockStatus[i].stockQuantity=(int)(this.balance/this.stockStatus[i].currnetAsk);
+				this.stockStatus[i].setRecommendion(ALGO_RECOMMENDATION.BUY);
+				this.updateBalance(-1*(this.stockStatus[i].currnetAsk*quantity));
+				return true;
+			}
+			else
+			{
+				System.out.println("Not enough money to buy");
+				return false;
+			}
+				
+		}
+	
+	}
+	System.out.println("There is no stock");
+	return false;
+	
+}
+
+public float getStocksValue()
+{
+	float sum=0;
+	
+	for (int i=0;i<portfolioSize;i++)
+	{
+		sum=this.stockStatus[i].getCurrnetBid()*this.stockStatus[i].stockQuantity+sum;
+	}
+	return sum;
+}
+public float getTotalValue()
+{
+	return this.getBalance()+this.getStocksValue();
+}
+
 /**
  * The class contains data on regarding the advisability of investing.
  * @author Ronny
  * @since 4.12.2014
  */
+
 	public class StockStatus {
 	
-		public final static int DO_NOTHING=0;
-		public final static int BUY=1;
-		public final static int SELL=2;
+	
 		public String Symbol;
 		public float currnetBid;
 		public float currnetAsk;
 		public Date date;
-		public int recommendion;
+		public ALGO_RECOMMENDATION recommendion;
 		public int stockQuantity;
 		
 		public StockStatus()
@@ -98,11 +218,10 @@ return getHtmlString;
 			currnetBid=0;
 			currnetAsk=0;
 			date=null;
-			recommendion=0;
 			stockQuantity=0;
 		}
 		
-		public StockStatus(String symbol1,float currnetBid1,float currnetAsk1,Date date1,int recommendion1,int stockQuantity1)
+		public StockStatus(String symbol1,float currnetBid1,float currnetAsk1,Date date1,ALGO_RECOMMENDATION recommendion1,int stockQuantity1)
 		{
 			Symbol=symbol1;
 			currnetBid=currnetBid1;
@@ -153,13 +272,14 @@ return getHtmlString;
 			this.date = date;
 		}
 		
-		public int getRecommendion() {
+		public ALGO_RECOMMENDATION getRecommendion() {
 			return recommendion;
 		}
-		
-		public void setRecommendion(int recommendion) {
+
+		public void setRecommendion(ALGO_RECOMMENDATION recommendion) {
 			this.recommendion = recommendion;
 		}
+
 		
 		public int getStockQuantity() {
 			return stockQuantity;
