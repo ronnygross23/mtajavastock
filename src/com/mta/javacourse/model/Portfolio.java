@@ -59,11 +59,11 @@ public Portfolio(Portfolio Portfolio2)
  * A method that adds stock in stock array
  * @param stock
  */
-public void addStock(Stock stock ,int quantity){
+public void addStock(Stock stock){
 	if(portfolioSize<MAX_PORTFILO_SIZE)
 	{
 		stocks[portfolioSize]=stock;
-		stockStatus[portfolioSize]=new StockStatus(stock.getSymbol(),stock.getBid(),stock.getAsk(),stock.getDate(),ALGO_RECOMMENDATION.DO_NOTHING,quantity);
+		stockStatus[portfolioSize]=new StockStatus(stock.getSymbol(),stock.getBid(),stock.getAsk(),new Date(stock.getDate().getTime()),ALGO_RECOMMENDATION.DO_NOTHING,0);
 		portfolioSize++;
 	}
 	else
@@ -90,17 +90,23 @@ public String getHtmlString(){
 	getHtmlString+="<h3>"+"Stocks:"+"</h3>";
 		for (i=0;i<portfolioSize;i++)
 		{
-			getHtmlString += stocks[i].getHtmlDescription() + "<br>";
+			getHtmlString += stocks[i].getHtmlDescription()+"<b> Quantity:</b> " + this.stockStatus[i].stockQuantity+ "<br>";
 		}
 		
 	return getHtmlString;
 	}
+/**
+ * method that remove the stock
+ * @param symbol
+ * @return true- if she managed to remove stock, false- if she didnt.
+ */
 public boolean removeStock(String symbol)
 {
 	for (int i=0;i<portfolioSize;i++)
 	{
 		if(this.stocks[i].getSymbol()==symbol)
 		{
+			this.sellStock(symbol, -1);
 			this.stocks[i]=this.stocks[portfolioSize-1];
 			this.stockStatus[i]=this.stockStatus[portfolioSize-1];
 			this.stocks[portfolioSize-1]=null;
@@ -112,7 +118,12 @@ public boolean removeStock(String symbol)
 	System.out.println("There is no stock");
 	return false;
 }
-
+/**
+ * method that sell the stock
+ * @param symbol
+ * @param quantity
+ * @return true- if she managed to sell the stock, false- if she didnt.
+ */
 public boolean sellStock (String symbol, int quantity)
 {
 	for(int i=0;i<portfolioSize;i++)
@@ -128,7 +139,7 @@ public boolean sellStock (String symbol, int quantity)
 		{
 			
 			this.updateBalance(this.stockStatus[i].stockQuantity*this.stockStatus[i].getCurrnetBid());
-			this.stockStatus[i].setRecommendion(ALGO_RECOMMENDATION.SELL);
+			//this.stockStatus[i].setRecommendion(ALGO_RECOMMENDATION.SELL);
 			this.stockStatus[i].stockQuantity=this.stockStatus[i].stockQuantity-quantity;
 			return true;
 				
@@ -140,12 +151,16 @@ public boolean sellStock (String symbol, int quantity)
 			
 		}
 		
-		System.out.println("There is no stock");
-		return false;
 	}
+	System.out.println("There is no stock");
 	return false;
 }
-
+/**
+ * method that buy the stock
+ * @param symbol
+ * @param quantity
+ * @return true- if she managed to buy the stock, false- if she didnt.
+ */
 public boolean buyStock (String symbol, int quantity)
 {
 	
@@ -156,13 +171,13 @@ public boolean buyStock (String symbol, int quantity)
 			if (quantity==-1)
 			{
 				this.stockStatus[i].stockQuantity=(int)(this.balance/this.stockStatus[i].currnetAsk);
-				this.stockStatus[i].setRecommendion(ALGO_RECOMMENDATION.BUY);
+				//this.stockStatus[i].setRecommendion(ALGO_RECOMMENDATION.BUY);
 				this.updateBalance(0);
 				return true;
 			}
-			if(this.balance>=this.stockStatus[i].getCurrnetAsk()*quantity)
+			else if(this.balance>=this.stockStatus[i].getCurrnetAsk()*quantity)
 			{
-				this.stockStatus[i].stockQuantity=(int)(this.balance/this.stockStatus[i].currnetAsk);
+				this.stockStatus[i].stockQuantity=quantity;
 				this.stockStatus[i].setRecommendion(ALGO_RECOMMENDATION.BUY);
 				this.updateBalance(-1*(this.stockStatus[i].currnetAsk*quantity));
 				return true;
