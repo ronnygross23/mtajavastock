@@ -1,21 +1,23 @@
 package com.mta.javacourse.service;
 
 import java.util.Date;
+
 import com.mta.javacourse.model.Portfolio;
-import com.mta.javacourse.model.Stock;
+import com.mta.javacourse.model.Portfolio.ALGO_RECOMMENDATION;
+import com.mta.javacourse.model.StockStatus;
 public class PortfolioService {
 	@SuppressWarnings("deprecation")
 	public Portfolio getPortfolio(){
 		Portfolio myPortfolio=new Portfolio();
-		
-		Stock Stock1 = new Stock();
-		Stock Stock2 = new Stock();
-		Stock Stock3 = new Stock();
-		
 		Date date = new java.util.Date();
 		date.setDate(15);
 		date.setMonth(11);
 		date.setYear(2014);
+		StockStatus Stock1 = new StockStatus("unknown", 0, 0, date, ALGO_RECOMMENDATION.DO_NOTHING, 0);
+		StockStatus Stock2 = new StockStatus("unknown", 0, 0, date, ALGO_RECOMMENDATION.DO_NOTHING, 0);
+		StockStatus Stock3 = new StockStatus("unknown", 0, 0, date, ALGO_RECOMMENDATION.DO_NOTHING, 0);
+		
+		
 		
 		Stock1.setSymbol("PIH");
 		Stock1.setAsk((float) 10);

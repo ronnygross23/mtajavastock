@@ -2,6 +2,7 @@ package com.mta.javacourse.model;
 
 
 import  java.util.*;
+import com.mta.javacourse.model.StockStatus;
 /**
  * The class contains data on stock software, adding listed in the array.
  * @author Ronny
@@ -9,10 +10,10 @@ import  java.util.*;
  */
 public class Portfolio {
 
-private static enum ALGO_RECOMMENDATION{DO_NOTHING,BUY,SELL};
+public static enum ALGO_RECOMMENDATION{DO_NOTHING,BUY,SELL};
 private final static int MAX_PORTFILO_SIZE=5;
 private String title;
-private Stock[] stocks;
+//private Stock[] stocks;
 private StockStatus[] stockStatus;
 private int portfolioSize;
 public int i=0;
@@ -41,17 +42,17 @@ public void updateBalance(float amount)
 
 public Portfolio()
 {
-	stocks= new Stock[MAX_PORTFILO_SIZE];
+	//stocks= new Stock[MAX_PORTFILO_SIZE];
 	stockStatus=new StockStatus[MAX_PORTFILO_SIZE];
 	balance=0;
 }
 
 public Portfolio(Portfolio Portfolio2)
 {
-	this.stocks=new Stock[Portfolio2.getStocks().length];
-	for(int i=0;i<stocks.length;i++)
+	this.stockStatus=new StockStatus[Portfolio2.getStocks().length];
+	for(int i=0;i<stockStatus.length;i++)
 	{
-		this.stocks[i]=Portfolio2.getStocks()[i];
+		this.stockStatus[i]=Portfolio2.getStocks()[i];
 	}
 }
 
@@ -62,7 +63,7 @@ public Portfolio(Portfolio Portfolio2)
 public void addStock(Stock stock){
 	if(portfolioSize<MAX_PORTFILO_SIZE)
 	{
-		stocks[portfolioSize]=stock;
+		//stocks[portfolioSize]=stock;
 		stockStatus[portfolioSize]=new StockStatus(stock.getSymbol(),stock.getBid(),stock.getAsk(),new Date(stock.getDate().getTime()),ALGO_RECOMMENDATION.DO_NOTHING,0);
 		portfolioSize++;
 	}
@@ -75,9 +76,9 @@ public void addStock(Stock stock){
  * A method that return the stock array
  * @stocks array
  */
-public Stock[] getStocks(){
+public StockStatus[] getStocks(){
 	
-	return stocks;
+	return stockStatus;
 }
 /**
  * a method that return the string
@@ -90,7 +91,7 @@ public String getHtmlString(){
 	getHtmlString+="<h3>"+"Stocks:"+"</h3>";
 		for (i=0;i<portfolioSize;i++)
 		{
-			getHtmlString += stocks[i].getHtmlDescription()+"<b> Quantity:</b> " + this.stockStatus[i].stockQuantity+ "<br>";
+			getHtmlString += stockStatus[i].getHtmlDescription()+"<b> Quantity:</b> " + this.stockStatus[i].stockQuantity+ "<br>";
 		}
 		
 	return getHtmlString;
@@ -104,13 +105,13 @@ public boolean removeStock(String symbol)
 {
 	for (int i=0;i<portfolioSize;i++)
 	{
-		if(this.stocks[i].getSymbol()==symbol)
+		if(this.stockStatus[i].getSymbol()==symbol)
 		{
 			this.sellStock(symbol, -1);
-			this.stocks[i]=this.stocks[portfolioSize-1];
 			this.stockStatus[i]=this.stockStatus[portfolioSize-1];
-			this.stocks[portfolioSize-1]=null;
+			//this.stockStatus[i]=this.stockStatus[portfolioSize-1];
 			this.stockStatus[portfolioSize-1]=null;
+			//this.stockStatus[portfolioSize-1]=null;
 			portfolioSize--;
 			return true;
 		}
@@ -128,23 +129,23 @@ public boolean sellStock (String symbol, int quantity)
 {
 	for(int i=0;i<portfolioSize;i++)
 	{
-		if(this.stocks[i].getSymbol()==symbol&&quantity==-1)
+		if(this.stockStatus[i].getSymbol()==symbol&&quantity==-1)
 		{
-			this.updateBalance(this.stockStatus[i].stockQuantity*this.stockStatus[i].getCurrnetBid());
+			this.updateBalance(this.stockStatus[i].stockQuantity*this.stockStatus[i].getBid());
 			this.stockStatus[i].setRecommendion(ALGO_RECOMMENDATION.SELL);
 			this.stockStatus[i].setStockQuantity(0);
 			return true;
 		}
-		else if(this.stocks[i].getSymbol()==symbol&&this.stockStatus[i].stockQuantity>quantity)
+		else if(this.stockStatus[i].getSymbol()==symbol&&this.stockStatus[i].stockQuantity>quantity)
 		{
 			
-			this.updateBalance(this.stockStatus[i].stockQuantity*this.stockStatus[i].getCurrnetBid());
+			this.updateBalance(this.stockStatus[i].stockQuantity*this.stockStatus[i].getBid());
 			//this.stockStatus[i].setRecommendion(ALGO_RECOMMENDATION.SELL);
 			this.stockStatus[i].stockQuantity=this.stockStatus[i].stockQuantity-quantity;
 			return true;
 				
 		}
-		else if (this.stocks[i].getSymbol()==symbol&&this.stockStatus[i].stockQuantity<quantity)
+		else if (this.stockStatus[i].getSymbol()==symbol&&this.stockStatus[i].stockQuantity<quantity)
 		{
 			System.out.println("Not enough stock to sell");
 			return false;
@@ -166,20 +167,20 @@ public boolean buyStock (String symbol, int quantity)
 	
 	for (int i=0;i<portfolioSize;i++)
 	{
-		if(this.stocks[i].getSymbol()==symbol)
+		if(this.stockStatus[i].getSymbol()==symbol)
 		{
 			if (quantity==-1)
 			{
-				this.stockStatus[i].stockQuantity=(int)(this.balance/this.stockStatus[i].currnetAsk);
+				this.stockStatus[i].stockQuantity=(int)(this.balance/this.stockStatus[i].ask);
 				//this.stockStatus[i].setRecommendion(ALGO_RECOMMENDATION.BUY);
 				this.updateBalance(0);
 				return true;
 			}
-			else if(this.balance>=this.stockStatus[i].getCurrnetAsk()*quantity)
+			else if(this.balance>=this.stockStatus[i].getAsk()*quantity)
 			{
 				this.stockStatus[i].stockQuantity=quantity;
 				this.stockStatus[i].setRecommendion(ALGO_RECOMMENDATION.BUY);
-				this.updateBalance(-1*(this.stockStatus[i].currnetAsk*quantity));
+				this.updateBalance(-1*(this.stockStatus[i].ask*quantity));
 				return true;
 			}
 			else
@@ -202,7 +203,7 @@ public float getStocksValue()
 	
 	for (int i=0;i<portfolioSize;i++)
 	{
-		sum=this.stockStatus[i].getCurrnetBid()*this.stockStatus[i].stockQuantity+sum;
+		sum=this.stockStatus[i].getBid()*this.stockStatus[i].stockQuantity+sum;
 	}
 	return sum;
 }
@@ -211,13 +212,15 @@ public float getTotalValue()
 	return this.getBalance()+this.getStocksValue();
 }
 
+}
+
 /**
  * The class contains data on regarding the advisability of investing.
  * @author Ronny
  * @since 4.12.2014
  */
 
-	public class StockStatus {
+	/*public class StockStatus {
 	
 	
 		public String Symbol;
@@ -308,5 +311,5 @@ public float getTotalValue()
 	}
 	
 
-}
+}*/
  
