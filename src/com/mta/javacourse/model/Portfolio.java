@@ -13,7 +13,6 @@ public class Portfolio {
 public static enum ALGO_RECOMMENDATION{DO_NOTHING,BUY,SELL};
 private final static int MAX_PORTFILO_SIZE=5;
 private String title;
-//private Stock[] stocks;
 private StockStatus[] stockStatus;
 private int portfolioSize;
 public int i=0;
@@ -63,7 +62,6 @@ public Portfolio(Portfolio Portfolio2)
 public void addStock(Stock stock){
 	if(portfolioSize<MAX_PORTFILO_SIZE)
 	{
-		//stocks[portfolioSize]=stock;
 		stockStatus[portfolioSize]=new StockStatus(stock.getSymbol(),stock.getBid(),stock.getAsk(),new Date(stock.getDate().getTime()),ALGO_RECOMMENDATION.DO_NOTHING,0);
 		portfolioSize++;
 	}
@@ -109,9 +107,7 @@ public boolean removeStock(String symbol)
 		{
 			this.sellStock(symbol, -1);
 			this.stockStatus[i]=this.stockStatus[portfolioSize-1];
-			//this.stockStatus[i]=this.stockStatus[portfolioSize-1];
 			this.stockStatus[portfolioSize-1]=null;
-			//this.stockStatus[portfolioSize-1]=null;
 			portfolioSize--;
 			return true;
 		}
@@ -140,8 +136,6 @@ public boolean sellStock (String symbol, int quantity)
 		{
 			
 			this.updateBalance(this.stockStatus[i].getStockQuantity()*this.stockStatus[i].getBid());
-			//this.stockStatus[i].setRecommendion(ALGO_RECOMMENDATION.SELL);
-			//this.stockStatus[i].stockQuantity=this.stockStatus[i].stockQuantity-quantity;
 			this.stockStatus[i].setStockQuantity(stockStatus[i].getStockQuantity()-quantity);
 			return true;
 				
@@ -172,15 +166,12 @@ public boolean buyStock (String symbol, int quantity)
 		{
 			if (quantity==-1)
 			{
-				//this.stockStatus[i].stockQuantity=(int)(this.balance/this.stockStatus[i].ask);
 				this.stockStatus[i].setStockQuantity((int)(this.balance/this.stockStatus[i].ask));
-				//this.stockStatus[i].setRecommendion(ALGO_RECOMMENDATION.BUY);
 				this.updateBalance(0);
 				return true;
 			}
 			else if(this.balance>=this.stockStatus[i].getAsk()*quantity)
 			{
-				//this.stockStatus[i].stockQuantity=quantity;
 				this.stockStatus[i].setStockQuantity(quantity);
 				this.stockStatus[i].setRecommendion(ALGO_RECOMMENDATION.BUY);
 				this.updateBalance(-1*(this.stockStatus[i].ask*quantity));
@@ -216,103 +207,3 @@ public float getTotalValue()
 }
 
 }
-
-/**
- * The class contains data on regarding the advisability of investing.
- * @author Ronny
- * @since 4.12.2014
- */
-
-	/*public class StockStatus {
-	
-	
-		public String Symbol;
-		public float currnetBid;
-		public float currnetAsk;
-		public Date date;
-		public ALGO_RECOMMENDATION recommendion;
-		public int stockQuantity;
-		
-		public StockStatus()
-		{
-			Symbol="unknown";
-			currnetBid=0;
-			currnetAsk=0;
-			date=null;
-			stockQuantity=0;
-		}
-		
-		public StockStatus(String symbol1,float currnetBid1,float currnetAsk1,Date date1,ALGO_RECOMMENDATION recommendion1,int stockQuantity1)
-		{
-			Symbol=symbol1;
-			currnetBid=currnetBid1;
-			currnetAsk=currnetAsk1;
-			date=date1;
-			recommendion=recommendion1;
-			stockQuantity=stockQuantity1;
-			
-		}
-		public StockStatus(StockStatus StockStatus1)
-		{
-			this.Symbol=StockStatus1.getSymbol();
-			this.currnetBid=StockStatus1.getCurrnetBid();
-			this.currnetAsk=StockStatus1.getCurrnetAsk();
-			this.date=StockStatus1.getDate();
-			this.recommendion=StockStatus1.getRecommendion();
-			this.stockQuantity=StockStatus1.getStockQuantity();
-		}
-		
-		public String getSymbol() {
-			return Symbol;
-		}
-		
-		public void setSymbol(String symbol) {
-			Symbol = symbol;
-		}
-		
-		public float getCurrnetBid() {
-			return currnetBid;
-		}
-		
-		public void setCurrnetBid(float currnetBid) {
-			this.currnetBid = currnetBid;
-		}
-		
-		public float getCurrnetAsk() {
-			return currnetAsk;
-		}
-		public void setCurrnetAsk(float currnetAsk) {
-			this.currnetAsk = currnetAsk;
-		}
-		
-		public Date getDate() {
-			return date;
-		}
-		
-		public void setDate(Date date) {
-			this.date = date;
-		}
-		
-		public ALGO_RECOMMENDATION getRecommendion() {
-			return recommendion;
-		}
-
-		public void setRecommendion(ALGO_RECOMMENDATION recommendion) {
-			this.recommendion = recommendion;
-		}
-
-		
-		public int getStockQuantity() {
-			return stockQuantity;
-		}
-		
-		public void setStockQuantity(int stockQuantity) {
-			this.stockQuantity = stockQuantity;
-		}
-	
-		
-	}
-	
-
-}*/
- 
