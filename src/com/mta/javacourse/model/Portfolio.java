@@ -1,7 +1,8 @@
 package com.mta.javacourse.model;
-
+import com.mta.javacourse.exceptions.*;
 
 import  java.util.*;
+
 import com.mta.javacourse.model.StockStatus;
 /**
  * The class contains data on stock software, adding listed in the array.
@@ -59,15 +60,23 @@ public Portfolio(Portfolio Portfolio2)
  * A method that adds stock in stock array
  * @param stock
  */
-public void addStock(Stock stock){
+public void addStock(Stock stock) throws PortfolioFullException,StockAlreadyExistsException{
 	if(portfolioSize<MAX_PORTFILO_SIZE)
 	{
+		for(int i=0;i<portfolioSize;i++)
+		{
+			if (stock.getSymbol()==stockStatus[i].getSymbol())
+			{
+				throw new StockAlreadyExistsException();
+			}
+		}
 		stockStatus[portfolioSize]=new StockStatus(stock.getSymbol(),stock.getBid(),stock.getAsk(),new Date(stock.getDate().getTime()),ALGO_RECOMMENDATION.DO_NOTHING,0);
 		portfolioSize++;
 	}
 	else
 	{
-		System.out.println("can't add new stock, portfolio can have only" +MAX_PORTFILO_SIZE +"stocks");
+		//System.out.println("can't add new stock, portfolio can have only" +MAX_PORTFILO_SIZE +"stocks");
+		throw new PortfolioFullException();
 	}
 }
 /**
@@ -97,9 +106,9 @@ public String getHtmlString(){
 /**
  * method that remove the stock
  * @param symbol
- * @return true- if she managed to remove stock, false- if she didn't.
+ *
  */
-public boolean removeStock(String symbol)
+public void removeStock(String symbol) throws StockNotExistException, NotEnoughStock
 {
 	for (int i=0;i<portfolioSize;i++)
 	{
@@ -109,19 +118,17 @@ public boolean removeStock(String symbol)
 			this.stockStatus[i]=this.stockStatus[portfolioSize-1];
 			this.stockStatus[portfolioSize-1]=null;
 			portfolioSize--;
-			return true;
 		}
 	}
-	System.out.println("There is no stock");
-	return false;
+	//System.out.println("There is no stock");
+	throw new StockNotExistException();
 }
 /**
  * method that sell the stock
  * @param symbol
  * @param quantity
- * @return true- if she managed to sell the stock, false- if she didnt.
  */
-public boolean sellStock (String symbol, int quantity)
+public void sellStock (String symbol, int quantity) throws StockNotExistException,NotEnoughStock 
 {
 	for(int i=0;i<portfolioSize;i++)
 	{
@@ -130,34 +137,32 @@ public boolean sellStock (String symbol, int quantity)
 			this.updateBalance(this.stockStatus[i].getStockQuantity()*this.stockStatus[i].getBid());
 			this.stockStatus[i].setRecommendion(ALGO_RECOMMENDATION.SELL);
 			this.stockStatus[i].setStockQuantity(0);
-			return true;
+			
 		}
 		else if(this.stockStatus[i].getSymbol()==symbol&&this.stockStatus[i].getStockQuantity()>quantity)
 		{
 			
 			this.updateBalance(this.stockStatus[i].getStockQuantity()*this.stockStatus[i].getBid());
 			this.stockStatus[i].setStockQuantity(stockStatus[i].getStockQuantity()-quantity);
-			return true;
 				
 		}
 		else if (this.stockStatus[i].getSymbol()==symbol&&this.stockStatus[i].getStockQuantity()<quantity)
 		{
-			System.out.println("Not enough stock to sell");
-			return false;
+			//System.out.println("Not enough stock to sell");
+			throw new NotEnoughStock();
 			
 		}
 		
 	}
-	System.out.println("There is no stock");
-	return false;
+	//System.out.println("There is no stock");
+	throw new StockNotExistException();
 }
 /**
  * method that buy the stock
  * @param symbol
  * @param quantity
- * @return true- if she managed to buy the stock, false- if she didn't.
  */
-public boolean buyStock (String symbol, int quantity)
+public void buyStock (String symbol, int quantity) throws BalanceException, StockNotExistException
 {
 	
 	for (int i=0;i<portfolioSize;i++)
@@ -168,26 +173,25 @@ public boolean buyStock (String symbol, int quantity)
 			{
 				this.stockStatus[i].setStockQuantity((int)(this.balance/this.stockStatus[i].ask));
 				this.updateBalance(0);
-				return true;
 			}
 			else if(this.balance>=this.stockStatus[i].getAsk()*quantity)
 			{
 				this.stockStatus[i].setStockQuantity(quantity);
 				this.stockStatus[i].setRecommendion(ALGO_RECOMMENDATION.BUY);
 				this.updateBalance(-1*(this.stockStatus[i].ask*quantity));
-				return true;
+				
 			}
 			else
 			{
-				System.out.println("Not enough money to buy");
-				return false;
+				//System.out.println("Not enough money to buy");
+				throw new BalanceException();
 			}
 				
 		}
 	
 	}
-	System.out.println("There is no stock");
-	return false;
+	//System.out.println("There is no stock");
+	throw new StockNotExistException();
 	
 }
 

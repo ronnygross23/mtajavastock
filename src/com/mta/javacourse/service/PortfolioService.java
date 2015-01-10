@@ -2,12 +2,13 @@ package com.mta.javacourse.service;
 
 import java.util.Date;
 
+import com.mta.javacourse.exceptions.*;
 import com.mta.javacourse.model.Portfolio;
 import com.mta.javacourse.model.Portfolio.ALGO_RECOMMENDATION;
 import com.mta.javacourse.model.StockStatus;
 public class PortfolioService {
 	@SuppressWarnings("deprecation")
-	public Portfolio getPortfolio(){
+	public Portfolio getPortfolio() throws StockNotExistException,StockAlreadyExistsException,NotEnoughStock,BalanceException,PortfolioFullException{
 		Portfolio myPortfolio=new Portfolio();
 		Date date = new java.util.Date();
 		date.setDate(15);
@@ -36,6 +37,7 @@ public class PortfolioService {
 		Stock3.setAsk((float) 20);
 		Stock3.setBid((float)15.5);
 		Stock3.setDate(date);
+		myPortfolio.addStock(Stock3);
 		myPortfolio.addStock(Stock3);
 		
 		myPortfolio.setTitle("Exerisce 7 portfolio");
