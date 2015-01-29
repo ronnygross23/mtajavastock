@@ -12,7 +12,7 @@ import com.mta.javacourse.model.StockStatus;
 public class Portfolio {
 
 public static enum ALGO_RECOMMENDATION{DO_NOTHING,BUY,SELL};
-private final static int MAX_PORTFILO_SIZE=5;
+public final static int MAX_PORTFILO_SIZE=5;
 private String title;
 private StockStatus[] stockStatus;
 private int portfolioSize;
@@ -56,6 +56,20 @@ public Portfolio(Portfolio Portfolio2)
 	}
 }
 
+public Portfolio(List<StockStatus> stockStatuses) {
+	this();
+	for(int i = 0; i < portfolioSize; i++)
+		this.stockStatus[i] = stockStatuses.get(i);
+}
+public StockStatus findBySymbol (String symbol)
+{
+	for(int i = 0; i < portfolioSize; i++){
+		if(stockStatus[i].getSymbol().toLowerCase().equals(symbol))
+			return stockStatus[i];
+	}
+	return null;
+}
+
 /**
  * A method that adds stock in stock array
  * @param stock
@@ -67,7 +81,7 @@ public void addStock(Stock stock) throws PortfolioFullException,StockAlreadyExis
 		{
 			if (stock.getSymbol()==stockStatus[i].getSymbol())
 			{
-				throw new StockAlreadyExistsException();
+				throw new StockAlreadyExistsException(stock.getSymbol());
 			}
 		}
 		stockStatus[portfolioSize]=new StockStatus(stock.getSymbol(),stock.getBid(),stock.getAsk(),new Date(stock.getDate().getTime()),ALGO_RECOMMENDATION.DO_NOTHING,0);
@@ -108,7 +122,7 @@ public String getHtmlString(){
  * @param symbol
  *
  */
-public void removeStock(String symbol) throws StockNotExistException, NotEnoughStock
+public void removeStock(String symbol) throws StockNotExistsException,IllegalQuantityException
 {
 	for (int i=0;i<portfolioSize;i++)
 	{
@@ -121,14 +135,14 @@ public void removeStock(String symbol) throws StockNotExistException, NotEnoughS
 		}
 	}
 	//System.out.println("There is no stock");
-	throw new StockNotExistException();
+	throw new StockNotExistsException(symbol);
 }
 /**
  * method that sell the stock
  * @param symbol
  * @param quantity
  */
-public void sellStock (String symbol, int quantity) throws StockNotExistException,NotEnoughStock 
+public void sellStock (String symbol, int quantity) throws StockNotExistsException,IllegalQuantityException 
 {
 	for(int i=0;i<portfolioSize;i++)
 	{
@@ -149,20 +163,20 @@ public void sellStock (String symbol, int quantity) throws StockNotExistExceptio
 		else if (this.stockStatus[i].getSymbol()==symbol&&this.stockStatus[i].getStockQuantity()<quantity)
 		{
 			//System.out.println("Not enough stock to sell");
-			throw new NotEnoughStock();
+			throw new IllegalQuantityException();
 			
 		}
 		
 	}
 	//System.out.println("There is no stock");
-	throw new StockNotExistException();
+	throw new StockNotExistsException(symbol);
 }
 /**
  * method that buy the stock
  * @param symbol
  * @param quantity
  */
-public void buyStock (String symbol, int quantity) throws BalanceException, StockNotExistException
+public void buyStock (String symbol, int quantity) throws BalanceException, StockNotExistsException
 {
 	
 	for (int i=0;i<portfolioSize;i++)
@@ -191,7 +205,7 @@ public void buyStock (String symbol, int quantity) throws BalanceException, Stoc
 	
 	}
 	//System.out.println("There is no stock");
-	throw new StockNotExistException();
+	throw new StockNotExistsException(symbol);
 	
 }
 

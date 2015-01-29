@@ -25,6 +25,11 @@ public class StockStatus extends Stock {
 		this.recommendion = stockstatus.getRecommendion();
 		this.stockQuantity = stockstatus.getStockQuantity();
 	}
+	public StockStatus(Stock stock) {
+		super(stock);
+		stockQuantity = 0;
+		recommendion = ALGO_RECOMMENDATION.DO_NOTHING;
+	}
 	public ALGO_RECOMMENDATION getRecommendion() {
 		return recommendion;
 	}
