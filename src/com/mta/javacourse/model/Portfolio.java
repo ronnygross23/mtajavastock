@@ -58,7 +58,7 @@ public Portfolio(Portfolio Portfolio2)
 
 public Portfolio(List<StockStatus> stockStatuses) {
 	this();
-	for(int i = 0; i < portfolioSize; i++)
+	for(int i = 0; i < stockStatuses.size(); i++)
 		this.stockStatus[i] = stockStatuses.get(i);
 }
 public StockStatus findBySymbol (String symbol)
