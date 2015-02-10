@@ -132,6 +132,7 @@ public void removeStock(String symbol) throws StockNotExistsException,IllegalQua
 			this.stockStatus[i]=this.stockStatus[portfolioSize-1];
 			this.stockStatus[portfolioSize-1]=null;
 			portfolioSize--;
+			return;
 		}
 	}
 	//System.out.println("There is no stock");
@@ -151,6 +152,7 @@ public void sellStock (String symbol, int quantity) throws StockNotExistsExcepti
 			this.updateBalance(this.stockStatus[i].getStockQuantity()*this.stockStatus[i].getBid());
 			this.stockStatus[i].setRecommendion(ALGO_RECOMMENDATION.SELL);
 			this.stockStatus[i].setStockQuantity(0);
+			return;
 			
 		}
 		else if(this.stockStatus[i].getSymbol()==symbol&&this.stockStatus[i].getStockQuantity()>quantity)
@@ -158,6 +160,7 @@ public void sellStock (String symbol, int quantity) throws StockNotExistsExcepti
 			
 			this.updateBalance(this.stockStatus[i].getStockQuantity()*this.stockStatus[i].getBid());
 			this.stockStatus[i].setStockQuantity(stockStatus[i].getStockQuantity()-quantity);
+			return;
 				
 		}
 		else if (this.stockStatus[i].getSymbol()==symbol&&this.stockStatus[i].getStockQuantity()<quantity)
@@ -187,12 +190,14 @@ public void buyStock (String symbol, int quantity) throws BalanceException, Stoc
 			{
 				this.stockStatus[i].setStockQuantity((int)(this.balance/this.stockStatus[i].ask));
 				this.updateBalance(0);
+				return;
 			}
 			else if(this.balance>=this.stockStatus[i].getAsk()*quantity)
 			{
 				this.stockStatus[i].setStockQuantity(quantity);
 				this.stockStatus[i].setRecommendion(ALGO_RECOMMENDATION.BUY);
 				this.updateBalance(-1*(this.stockStatus[i].ask*quantity));
+				return;
 				
 			}
 			else

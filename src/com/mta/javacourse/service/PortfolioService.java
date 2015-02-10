@@ -161,17 +161,17 @@ public class PortfolioService {
 		}
 	}
 	
-	public void buyStock(String symbol, int quantity) throws BalanceException, StockNotExistsException {
+	public void buyStock(String symbol, int quantity) throws BalanceException, StockNotExistsException, IllegalQuantityException {
 		getPortfolio().buyStock(symbol, quantity);
 		flush();
 	}
 
-	public void sellStock(String symbol, int quantity) throws StockNotExistsException, IllegalQuantityException {
+	public void sellStock(String symbol, int quantity) throws StockNotExistsException, IllegalQuantityException, BalanceException {
 		getPortfolio().sellStock(symbol, quantity);
 		flush();
 	}
 
-	public void removeStock(String symbol) throws StockNotExistsException, IllegalQuantityException {
+	public void removeStock(String symbol) throws StockNotExistsException, IllegalQuantityException, BalanceException {
 		getPortfolio().removeStock(symbol);
 		flush();
 	}
